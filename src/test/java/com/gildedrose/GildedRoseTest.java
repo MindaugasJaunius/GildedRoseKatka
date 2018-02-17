@@ -101,6 +101,7 @@ public class GildedRoseTest {
         inn = new GildedRose(items);
 
         inn.updateQuality();
+
         assertEquals(Constants.SULFURAS, items[0].name);
         assertEquals(10, items[0].sellIn);
         assertEquals(80, items[0].quality);
@@ -154,6 +155,28 @@ public class GildedRoseTest {
         inn = new GildedRose(items);
 
         assertEquals("foo, 0, 0", items[0].toString());
+    }
+
+    @Test
+    public void conjured_item_drops_quality_by_two_with_positive_sellin() throws Exception {
+        Item[] items = {new Item(Constants.CONJURED, 2, 5)};
+        inn = new GildedRose(items);
+
+        inn.updateQuality();
+
+        assertEquals(1, items[0].sellIn);
+        assertEquals(3, items[0].quality);
+    }
+
+    @Test
+    public void conjured_item_drops_quality_by_four_when_expires() throws Exception {
+        Item[] items = {new Item(Constants.CONJURED, 0, 5)};
+        inn = new GildedRose(items);
+
+        inn.updateQuality();
+
+        assertEquals(-1, items[0].sellIn);
+        assertEquals(1, items[0].quality);
     }
 
 }

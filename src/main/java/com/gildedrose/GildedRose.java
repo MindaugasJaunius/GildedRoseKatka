@@ -16,6 +16,8 @@ class GildedRose {
                 updateBackstagePass(item);
             } else if (item.name.equals(Constants.SULFURAS)) {
                 updateSulfuras(item);
+            } else if (item.name.equals(Constants.CONJURED)) {
+                updateConjured(item);
             } else {
                 updateDefaultItem(item);
             }
@@ -63,6 +65,18 @@ class GildedRose {
 
     private void updateSulfuras(Item item) {
 
+    }
+
+    private void updateConjured(Item item) {
+        decreaseQualityByOne(item);
+        decreaseQualityByOne(item);
+
+        item.sellIn--;
+
+        if (hasExpired(item.sellIn)) {
+            decreaseQualityByOne(item);
+            decreaseQualityByOne(item);
+        }
     }
 
     private boolean hasExpired(int sellIn) {

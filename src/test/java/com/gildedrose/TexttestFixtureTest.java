@@ -37,7 +37,7 @@ public class TexttestFixtureTest {
             "Backstage passes to a TAFKAL80ETC concert, 14, 21" + lineBreak +
             "Backstage passes to a TAFKAL80ETC concert, 9, 50" + lineBreak +
             "Backstage passes to a TAFKAL80ETC concert, 4, 50" + lineBreak +
-            "Conjured Mana Cake, 2, 5" + lineBreak +
+            "Conjured Mana Cake, 2, 4" + lineBreak +
             lineBreak;
 
     @Test
@@ -56,7 +56,6 @@ public class TexttestFixtureTest {
                 new Item("Backstage passes to a TAFKAL80ETC concert", 15, 20),
                 new Item("Backstage passes to a TAFKAL80ETC concert", 10, 49),
                 new Item("Backstage passes to a TAFKAL80ETC concert", 5, 49),
-                // this conjured item does not work properly yet
                 new Item("Conjured Mana Cake", 3, 6) };
 
         inn = new GildedRose(items);
