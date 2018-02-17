@@ -2,12 +2,6 @@ package com.gildedrose;
 
 class GildedRose {
 
-    private final String AGED_BRIE = "Aged Brie";
-    private final String BACKSTAGE_PASS = "Backstage passes to a TAFKAL80ETC concert";
-    private final String SULFURAS = "Sulfuras, Hand of Ragnaros";
-
-    private final int MAX_QUALITY = 50;
-
     private Item[] items;
 
     public GildedRose(Item[] items) {
@@ -16,59 +10,74 @@ class GildedRose {
 
     public void updateQuality() {
         for (Item item : items) {
-            if (item.name.equals(SULFURAS))
-                continue;
-            updateItemValues(item);
+            if (item.name.equals(Constants.AGED_BRIE)) {
+                updateAgedBrie(item);
+            } else if (item.name.equals(Constants.BACKSTAGE_PASS)) {
+                updateBackstagePass(item);
+            } else if (item.name.equals(Constants.SULFURAS)) {
+                updateSulfuras(item);
+            } else {
+                updateDefaultItem(item);
+            }
         }
     }
 
-    private void updateItemValues(Item item) {
-        updateItemQuality(item);
+    private void updateAgedBrie(Item item) {
+        increaseQualityByOne(item);
 
-        item.sellIn = item.sellIn - 1;
+        item.sellIn--;
 
-        if (item.sellIn < 0) {
-            updateExpiredItem(item);
-        }
-    }
-
-    private void updateItemQuality(Item item) {
-        if (item.name.equals(AGED_BRIE)) {
+        if (hasExpired(item.sellIn)) {
             increaseQualityByOne(item);
-        } else if (item.name.equals(BACKSTAGE_PASS)) {
-            updateBackstagePass(item);
-        } else decreaseQualityByOne(item);
+        }
     }
 
     private void updateBackstagePass(Item item) {
         increaseQualityByOne(item);
 
-        if (item.sellIn < 11) {
+        item.sellIn--;
+
+        if (item.sellIn < Constants.BACKSTAGE_PASS_TEN_DAYS) {
             increaseQualityByOne(item);
         }
 
-        if (item.sellIn < 6) {
+        if (item.sellIn < Constants.BACKSTAGE_PASS_FIVE_DAYS) {
             increaseQualityByOne(item);
+        }
+
+        if (hasExpired(item.sellIn)) {
+            item.quality = Constants.MIN_QUALITY;
         }
     }
 
-    private void updateExpiredItem(Item item) {
-        if (item.name.equals(AGED_BRIE)) {
-            increaseQualityByOne(item);
-        } else if (item.name.equals(BACKSTAGE_PASS)) {
-            item.quality = 0;
-        } else decreaseQualityByOne(item);
+    private void updateDefaultItem(Item item) {
+        decreaseQualityByOne(item);
+
+        item.sellIn--;
+
+        if (hasExpired(item.sellIn)) {
+            decreaseQualityByOne(item);
+        }
+
+    }
+
+    private void updateSulfuras(Item item) {
+
+    }
+
+    private boolean hasExpired(int sellIn) {
+        return sellIn < Constants.EXPIRED_SELL;
     }
 
     private void decreaseQualityByOne(Item item) {
-        if (item.quality > 0) {
-            item.quality = item.quality - 1;
+        if (item.quality > Constants.MIN_QUALITY) {
+            item.quality--;
         }
     }
 
     private void increaseQualityByOne(Item item) {
-        if (item.quality < MAX_QUALITY) {
-            item.quality = item.quality + 1;
+        if (item.quality < Constants.MAX_QUALITY) {
+            item.quality++;
         }
     }
 

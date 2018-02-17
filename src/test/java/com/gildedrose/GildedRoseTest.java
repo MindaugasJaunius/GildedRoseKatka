@@ -64,7 +64,7 @@ public class GildedRoseTest {
 
     @Test
     public void aged_brie_increases_quality_by_one_with_positive_sellin() throws Exception {
-        Item[] items = {new Item("Aged Brie", 10, 10)};
+        Item[] items = {new Item(Constants.AGED_BRIE, 10, 10)};
         inn = new GildedRose(items);
 
         inn.updateQuality();
@@ -75,7 +75,7 @@ public class GildedRoseTest {
 
     @Test
     public void aged_brie_increases_quality_by_two_with_negative_sellin() throws Exception {
-        Item[] items = {new Item("Aged Brie", -1, 10)};
+        Item[] items = {new Item(Constants.AGED_BRIE, -1, 10)};
         inn = new GildedRose(items);
 
         inn.updateQuality();
@@ -86,30 +86,30 @@ public class GildedRoseTest {
 
     @Test
     public void item_does_not_increase_in_quality_after_reaching_fifty() throws Exception {
-        Item[] items = {new Item("Aged Brie", 10, 50)};
+        Item[] items = {new Item(Constants.AGED_BRIE, 10, Constants.MAX_QUALITY)};
         inn = new GildedRose(items);
 
         inn.updateQuality();
 
         assertEquals(9, items[0].sellIn);
-        assertEquals(50, items[0].quality);
+        assertEquals(Constants.MAX_QUALITY, items[0].quality);
     }
 
     @Test
     public void sulfuras_does_not_change_values_after_updateQuality_call() throws Exception {
-        Item[] items = {new Item("Sulfuras, Hand of Ragnaros", 10, 50)};
+        Item[] items = {new Item(Constants.SULFURAS, 10, 80)};
         inn = new GildedRose(items);
 
         inn.updateQuality();
-        assertEquals("Sulfuras, Hand of Ragnaros", items[0].name);
+        assertEquals(Constants.SULFURAS, items[0].name);
         assertEquals(10, items[0].sellIn);
-        assertEquals(50, items[0].quality);
+        assertEquals(80, items[0].quality);
     }
 
     @Test
     public void backstage_passes_increases_quality_by_two_when_sellin_is_ten_or_less() throws Exception {
-        Item[] items = {new Item("Backstage passes to a TAFKAL80ETC concert", 10, 20),
-                new Item("Backstage passes to a TAFKAL80ETC concert", 8, 49)};
+        Item[] items = {new Item(Constants.BACKSTAGE_PASS, 10, 20),
+                new Item(Constants.BACKSTAGE_PASS, 8, 49)};
         inn = new GildedRose(items);
 
         inn.updateQuality();
@@ -117,13 +117,13 @@ public class GildedRoseTest {
         assertEquals(9, items[0].sellIn);
         assertEquals(22, items[0].quality);
         assertEquals(7, items[1].sellIn);
-        assertEquals(50, items[1].quality);
+        assertEquals(Constants.MAX_QUALITY, items[1].quality);
     }
 
     @Test
     public void backstage_passes_increases_quality_by_three_when_sellin_is_five_or_less() throws Exception {
-        Item[] items = {new Item("Backstage passes to a TAFKAL80ETC concert", 5, 20),
-                new Item("Backstage passes to a TAFKAL80ETC concert", 3, 49)};
+        Item[] items = {new Item(Constants.BACKSTAGE_PASS, 5, 20),
+                new Item(Constants.BACKSTAGE_PASS, 3, 49)};
         inn = new GildedRose(items);
 
         inn.updateQuality();
@@ -131,21 +131,21 @@ public class GildedRoseTest {
         assertEquals(4, items[0].sellIn);
         assertEquals(23, items[0].quality);
         assertEquals(2, items[1].sellIn);
-        assertEquals(50, items[1].quality);
+        assertEquals(Constants.MAX_QUALITY, items[1].quality);
     }
 
     @Test
     public void backstage_passes_drops_quality_to_zero_after_concert() throws Exception {
-        Item[] items = {new Item("Backstage passes to a TAFKAL80ETC concert", 0, 0),
-                new Item("Backstage passes to a TAFKAL80ETC concert", -1, 50)};
+        Item[] items = {new Item(Constants.BACKSTAGE_PASS, 0, Constants.MIN_QUALITY),
+                new Item(Constants.BACKSTAGE_PASS, -1, Constants.MAX_QUALITY)};
         inn = new GildedRose(items);
 
         inn.updateQuality();
 
         assertEquals(-1, items[0].sellIn);
-        assertEquals(0, items[0].quality);
+        assertEquals(Constants.MIN_QUALITY, items[0].quality);
         assertEquals(-2, items[1].sellIn);
-        assertEquals(0, items[1].quality);
+        assertEquals(Constants.MIN_QUALITY, items[1].quality);
     }
 
     @Test
