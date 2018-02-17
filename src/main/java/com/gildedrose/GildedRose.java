@@ -10,13 +10,13 @@ class GildedRose {
 
     public void updateQuality() {
         for (Item item : items) {
-            if (item.name.equals(Constants.AGED_BRIE)) {
+            if (item.name.startsWith(Constants.AGED_BRIE)) {
                 updateAgedBrie(item);
-            } else if (item.name.equals(Constants.BACKSTAGE_PASS)) {
+            } else if (item.name.startsWith(Constants.BACKSTAGE_PASS)) {
                 updateBackstagePass(item);
-            } else if (item.name.equals(Constants.SULFURAS)) {
+            } else if (item.name.startsWith(Constants.SULFURAS)) {
                 updateSulfuras(item);
-            } else if (item.name.equals(Constants.CONJURED)) {
+            } else if (item.name.startsWith(Constants.CONJURED)) {
                 updateConjured(item);
             } else {
                 updateDefaultItem(item);
