@@ -1,17 +1,159 @@
 package com.gildedrose;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 public class GildedRoseTest {
 
+    private GildedRose inn;
+
     @Test
-    public void foo() {
-        Item[] items = new Item[] { new Item("foo", 0, 0) };
-        GildedRose app = new GildedRose(items);
-        app.updateQuality();
-        assertEquals("fixme", app.items[0].name);
+    public void item_lowers_in_quality_and_sellin_by_one_after_updateQuality_call() {
+        Item[] items = {new Item("foo", 10, 10)};
+        inn = new GildedRose(items);
+
+        inn.updateQuality();
+
+        assertEquals(9, items[0].sellIn);
+        assertEquals(9, items[0].quality);
+    }
+
+    @Test
+    public void item_name_never_changes() throws Exception {
+        Item[] items = {new Item("foo", 10, 10)};
+        inn = new GildedRose(items);
+
+        inn.updateQuality();
+
+        assertEquals("foo", items[0].name);
+    }
+
+    @Test
+    public void when_sellin_becomes_zero_quality_degrades_by_two() throws Exception {
+        Item[] items = {new Item("foo", 0, 10)};
+        inn = new GildedRose(items);
+
+        inn.updateQuality();
+
+        assertEquals(-1, items[0].sellIn);
+        assertEquals(8, items[0].quality);
+    }
+
+    @Test
+    public void item_quality_does_not_become_negative_with_sellin_change() throws Exception {
+        Item[] items = {new Item("foo", 10, 0)};
+        inn = new GildedRose(items);
+
+        inn.updateQuality();
+
+        assertEquals(9, items[0].sellIn);
+        assertEquals(0, items[0].quality);
+    }
+
+    @Test
+    public void item_quality_does_not_become_negative_with_zero_sellin() throws Exception {
+        Item[] items = {new Item("foo", 0, 1)};
+        inn = new GildedRose(items);
+
+        inn.updateQuality();
+
+        assertEquals(-1, items[0].sellIn);
+        assertEquals(0, items[0].quality);
+    }
+
+    @Test
+    public void aged_brie_increases_quality_by_one_with_positive_sellin() throws Exception {
+        Item[] items = {new Item("Aged Brie", 10, 10)};
+        inn = new GildedRose(items);
+
+        inn.updateQuality();
+
+        assertEquals(9, items[0].sellIn);
+        assertEquals(11, items[0].quality);
+    }
+
+    @Test
+    public void aged_brie_increases_quality_by_two_with_negative_sellin() throws Exception {
+        Item[] items = {new Item("Aged Brie", -1, 10)};
+        inn = new GildedRose(items);
+
+        inn.updateQuality();
+
+        assertEquals(-2, items[0].sellIn);
+        assertEquals(12, items[0].quality);
+    }
+
+    @Test
+    public void item_does_not_increase_in_quality_after_reaching_fifty() throws Exception {
+        Item[] items = {new Item("Aged Brie", 10, 50)};
+        inn = new GildedRose(items);
+
+        inn.updateQuality();
+
+        assertEquals(9, items[0].sellIn);
+        assertEquals(50, items[0].quality);
+    }
+
+    @Test
+    public void sulfuras_does_not_change_values_after_updateQuality_call() throws Exception {
+        Item[] items = {new Item("Sulfuras, Hand of Ragnaros", 10, 50)};
+        inn = new GildedRose(items);
+
+        inn.updateQuality();
+        assertEquals("Sulfuras, Hand of Ragnaros", items[0].name);
+        assertEquals(10, items[0].sellIn);
+        assertEquals(50, items[0].quality);
+    }
+
+    @Test
+    public void backstage_passes_increases_quality_by_two_when_sellin_is_ten_or_less() throws Exception {
+        Item[] items = {new Item("Backstage passes to a TAFKAL80ETC concert", 10, 20),
+                new Item("Backstage passes to a TAFKAL80ETC concert", 8, 49)};
+        inn = new GildedRose(items);
+
+        inn.updateQuality();
+
+        assertEquals(9, items[0].sellIn);
+        assertEquals(22, items[0].quality);
+        assertEquals(7, items[1].sellIn);
+        assertEquals(50, items[1].quality);
+    }
+
+    @Test
+    public void backstage_passes_increases_quality_by_three_when_sellin_is_five_or_less() throws Exception {
+        Item[] items = {new Item("Backstage passes to a TAFKAL80ETC concert", 5, 20),
+                new Item("Backstage passes to a TAFKAL80ETC concert", 3, 49)};
+        inn = new GildedRose(items);
+
+        inn.updateQuality();
+
+        assertEquals(4, items[0].sellIn);
+        assertEquals(23, items[0].quality);
+        assertEquals(2, items[1].sellIn);
+        assertEquals(50, items[1].quality);
+    }
+
+    @Test
+    public void backstage_passes_drops_quality_to_zero_after_concert() throws Exception {
+        Item[] items = {new Item("Backstage passes to a TAFKAL80ETC concert", 0, 0),
+                new Item("Backstage passes to a TAFKAL80ETC concert", -1, 50)};
+        inn = new GildedRose(items);
+
+        inn.updateQuality();
+
+        assertEquals(-1, items[0].sellIn);
+        assertEquals(0, items[0].quality);
+        assertEquals(-2, items[1].sellIn);
+        assertEquals(0, items[1].quality);
+    }
+
+    @Test
+    public void item_toString_preserved() {
+        Item[] items = {new Item("foo", 0, 0)};
+        inn = new GildedRose(items);
+
+        assertEquals("foo, 0, 0", items[0].toString());
     }
 
 }
